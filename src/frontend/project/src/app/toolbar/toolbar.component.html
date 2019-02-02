@@ -1,0 +1,35 @@
+<nav class="navbar navbar is-fixed-top is-link">
+  <div class="container">
+    <div class="navbar-brand">
+
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" [routerLink]="[ '/main-app/dashboard' ]" routerLinkActive="is-active">
+          Dashboard
+        </a>
+
+        <a class="navbar-item" [routerLink]="[ '/main-app/fund-settings' ]" routerLinkActive="is-active">
+          Fund Settings
+        </a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a class="button is-light">{{ user | titlecase }}</a>
+            <a class="button is-primary" (click)="onLogout()">
+              Sign out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

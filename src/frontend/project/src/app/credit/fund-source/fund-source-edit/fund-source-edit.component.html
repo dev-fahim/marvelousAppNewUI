@@ -1,0 +1,44 @@
+<!--
+  
+<div class="ui segment violet">
+  <div class="ui icon message {{ message.type }}" *ngFor="let message of messages">
+    <i class="x icon" *ngIf="message.type === 'error'"></i>
+    <i class="check icon" *ngIf="message.type === 'positive'"></i>
+    <div class="content">
+      <b>{{ message.message }}</b>
+    </div>
+  </div>
+  <form class="ui fluid small form" [formGroup]="form" (ngSubmit)="onSubmit()" [ngClass]="{'loading': loading || loading_del}">
+    <div class="field" [ngClass]="{'disabled': !form.get('source_name').valid}">
+      <label>Credit Head Name</label>
+      <input type="text" formControlName="source_name">
+    </div>
+    <button class="ui blue labeled icon button tiny" type="submit" [ngClass]="{'loading': loading}"><i class="angle double up icon"></i>Upgrade</button>
+  </form>
+  <div class="ui divider"></div>
+  <button class="ui yellow labeled icon button tiny" (click)="onReset()"><i class="redo icon"></i>Reset</button>
+  <button class="ui red labeled icon button tiny" [ngClass]="{'loading': loading_del}" (click)="onDelete()"><i class="eraser icon"></i>Delete</button>
+</div>
+-->
+
+<div class="segment">
+  <article class="message is-danger" *ngFor="let message of messages" [ngClass]="{'is-danger': message.type === 'error', 'is-success': message.type === 'positive'}">
+    <div class="message-header">
+      <p>{{ message.type === 'error'? 'Error' : 'Success' }}</p>
+    </div>
+    <div class="message-body">
+      {{ message.message }}
+    </div>
+  </article>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="field">
+      <label for="" class="label" [ngClass]="{'is-danger': form.get('source_name').invalid && form.get('source_name').touched}">Credit
+        Head Name</label>
+      <input type="text" class="input" formControlName="source_name">
+    </div>
+    <button class="button is-link" type="submit" [ngClass]="{'is-loading': loading}" appShadow>Upgrade</button>
+  </form>
+  <hr>
+  <button class="button is-danger mr-2" [ngClass]="{'is-loading': loading_del}" (click)="onDelete()" appShadow>Delete</button>
+  <button class="button is-warning" (click)="onReset()" appShadow>Reset</button>
+</div>

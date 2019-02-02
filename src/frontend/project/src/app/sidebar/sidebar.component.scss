@@ -1,0 +1,15 @@
+.space-before {
+    min-height: 100px;
+}
+
+#menu {
+    z-index: 6;
+}
+.main-menu {
+    width: 250px;
+    position: fixed;
+    top: 55px;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+}
