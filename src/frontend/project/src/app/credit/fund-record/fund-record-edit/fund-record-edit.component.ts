@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { ServerError } from 'src/app/common/serve-error';
 import { UnAuthorized } from 'src/app/common/unauthorized-error';
 import { NotFound } from 'src/app/common/not-found';
@@ -7,7 +6,7 @@ import { BadInput } from './../../../common/bad-input';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FundService } from 'src/app/service/credit/fund.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CreditFundRecordGETModel, CreditFundSourceGETModel } from './../../../service/models';
+import { CreditFundRecordGETModel, CreditFundSourceGETModel, CreditFundRecordPUTModel } from './../../../service/models';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppError } from 'src/app/common/app-error';
 import { SourceService } from 'src/app/service/credit/source.service';
@@ -49,7 +48,7 @@ export class FundRecordEditComponent implements OnInit, OnDestroy {
     is_deleted: new FormControl(false)
   });
 
-  all_sources: CreditFundSourceGETModel[] = [{ source_name: '', description: '', extra_description: '' }];
+  all_sources: CreditFundSourceGETModel[] = [];
 
   constructor(
     private _fundService: FundService,
@@ -134,7 +133,7 @@ export class FundRecordEditComponent implements OnInit, OnDestroy {
       this.loading = true;
       this._fundService.update_funds(this.form.value, this.uuid)
         .subscribe(
-          (next: CreditFundRecordGETModel) => {
+          (next: CreditFundRecordPUTModel) => {
             this.loading = false;
             this.messages.splice(0, 0, { message: 'Credit fund record has been UPDATED successfuly.', type: 'positive' });
           },
@@ -151,7 +150,7 @@ export class FundRecordEditComponent implements OnInit, OnDestroy {
       this.loading_del = true;
       this.form.get('is_deleted').setValue(true);
       this._fundService.update_funds(this.form.value, this.uuid)
-        .subscribe((next: CreditFundRecordGETModel) => {
+        .subscribe((next: CreditFundRecordPUTModel) => {
           this.loading_del = false;
           this._router.navigate(['/main-app/credit/fund/record/list-add'])
         },

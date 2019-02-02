@@ -1,5 +1,3 @@
-import { FundStatus } from './../../../service/credit/fund.service';
-import { CreditFundSourceGETModel } from './../../../service/models';
 import { NotFound } from './../../../common/not-found';
 import { ServerError } from 'src/app/common/serve-error';
 import { UnAuthorized } from './../../../common/unauthorized-error';
@@ -10,8 +8,8 @@ import { FundService } from 'src/app/service/credit/fund.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { CreditFundRecordGETModel } from 'src/app/service/models';
 import { SourceService } from 'src/app/service/credit/source.service';
+import * as models from '../../../service/models';
 
 @Component({
   selector: 'app-fund-record-add',
@@ -20,7 +18,7 @@ import { SourceService } from 'src/app/service/credit/source.service';
 })
 export class FundRecordAddComponent implements OnInit {
 
-  @Output() record_data = new EventEmitter<CreditFundRecordGETModel>();
+  @Output() record_data = new EventEmitter<models.CreditFundRecordGETModel>();
 
   messages: { message: string, type: string }[] = [];
   loading = false;
@@ -45,7 +43,7 @@ export class FundRecordAddComponent implements OnInit {
     is_deleted: new FormControl(false)
   });
 
-  all_sources: CreditFundSourceGETModel[] = [];
+  all_sources: models.CreditFundSourceGETModel[] = [];
 
   constructor(
     private _fundService: FundService,
@@ -97,7 +95,7 @@ export class FundRecordAddComponent implements OnInit {
       this.loading = true;
       this._fundService.add_funds(this.form.value)
         .subscribe(
-          (next: CreditFundRecordGETModel) => {
+          (next: models.CreditFundRecordPOSTModel) => {
             this.record_data.emit(this.form.value);
             this.loading = false;
             this.form.reset;

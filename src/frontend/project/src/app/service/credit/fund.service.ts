@@ -1,9 +1,9 @@
-import { CreditFundRecordGETModel } from './../models';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { LOCAL_REST_API_SERVER } from './../server.url';
 import { catchError, map } from 'rxjs/operators';
 import { errorResponse } from 'src/app/common/error-response';
+import * as models from '../models';
 
 export interface CreditFundRecordListFilter {
   added: string;
@@ -39,7 +39,7 @@ export class FundService {
     ordering: '',
     search: ''
   }) {
-    return this._http.get<CreditFundRecordGETModel[]>(LOCAL_REST_API_SERVER + 'credit/fund/list/', {
+    return this._http.get<models.CreditFundRecordGETModel[]>(LOCAL_REST_API_SERVER + 'credit/fund/list/', {
       params:
       {
         added: filters.added,
@@ -56,13 +56,13 @@ export class FundService {
   }
 
   add_funds(data: any) {
-    return this._http.post<CreditFundRecordGETModel>(LOCAL_REST_API_SERVER + 'credit/fund/list-add/', JSON.stringify(data)).pipe(
+    return this._http.post<models.CreditFundRecordPOSTModel>(LOCAL_REST_API_SERVER + 'credit/fund/list-add/', JSON.stringify(data)).pipe(
       catchError(errorResponse)
     )
   }
 
   get_specific_fund_record(uuid: string) {
-    return this._http.get<CreditFundRecordGETModel>(LOCAL_REST_API_SERVER + 'credit/fund/view/' + uuid + '/').pipe(
+    return this._http.get<models.CreditFundRecordGETModel>(LOCAL_REST_API_SERVER + 'credit/fund/view/' + uuid + '/').pipe(
       catchError(errorResponse)
     )
   }
@@ -85,13 +85,13 @@ export class FundService {
   }
 
   update_funds(data: any, uuid: string) {
-    return this._http.put<CreditFundRecordGETModel>(LOCAL_REST_API_SERVER + 'credit/fund/view-update-delete/' + uuid + '/', JSON.stringify(data)).pipe(
+    return this._http.put<models.CreditFundRecordPUTModel>(LOCAL_REST_API_SERVER + 'credit/fund/view-update-delete/' + uuid + '/', JSON.stringify(data)).pipe(
       catchError(errorResponse)
     )
   }
 
   delete_funds(uuid: string) {
-    return this._http.delete<CreditFundRecordGETModel>(LOCAL_REST_API_SERVER + 'credit/fund/view-update-delete/' + uuid + '/').pipe(
+    return this._http.delete<models.CreditFundRecordPUTModel>(LOCAL_REST_API_SERVER + 'credit/fund/view-update-delete/' + uuid + '/').pipe(
       catchError(errorResponse)
     )
   }

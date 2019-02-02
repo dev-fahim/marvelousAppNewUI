@@ -1,3 +1,4 @@
+import { CreditFundSourcePOSTModel } from './../../../service/models';
 import { FundService } from 'src/app/service/credit/fund.service';
 import { ServerError } from 'src/app/common/serve-error';
 import { UnAuthorized } from 'src/app/common/unauthorized-error';
@@ -29,7 +30,9 @@ export class FundSourceAddComponent implements OnInit {
       Validators.required,
       Validators.minLength(4),
       Validators.maxLength(30)
-    ])
+    ]),
+    extra_description: new FormControl(""),
+    is_deleted: new FormControl(false)
   });
 
   constructor(
@@ -72,7 +75,7 @@ export class FundSourceAddComponent implements OnInit {
       this.loading = true;
       this._sourceService.add_sources(this.form.value)
         .subscribe(
-          (next: CreditFundSourceGETModel) => {
+          (next: CreditFundSourcePOSTModel) => {
             this.record_data.emit(this.form.value);
             this.loading = false;
             this.form.reset;

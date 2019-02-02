@@ -1,3 +1,4 @@
+import { ExpenditureHeadingPUTModel } from './../../../service/models';
 import { BehaviorSubject } from 'rxjs';
 import { NotFound } from './../../../common/not-found';
 import { AppError } from '../../../common/app-error';
@@ -20,8 +21,14 @@ export class HeadingEditComponent {
   loading = false;
   loading_del = false;
   private _data = new BehaviorSubject<ExpenditureHeadingGETModel>({
+    id: 0,
     heading_name: '',
-    description: ''
+    description: '',
+    updated: '',
+    uuid: '',
+    url: '',
+    added: '',
+    is_deleted: false
   });
 
   @Input()
@@ -82,7 +89,7 @@ export class HeadingEditComponent {
       this.loading = true;
       this._headingService.update_heading(this.form.value, this.uuid)
         .subscribe(
-          (next: ExpenditureHeadingGETModel) => {
+          (next: ExpenditureHeadingPUTModel) => {
             this.loading = false;
             console.log('Updated')
             this.messages.splice(0, 0, { message: 'Debit Heading UPDATED successfuly.', type: 'positive' });
@@ -99,7 +106,7 @@ export class HeadingEditComponent {
     if (this.form.valid) {
       this.loading_del = true;
       this._headingService.delete_heading(this.uuid)
-        .subscribe((next: ExpenditureHeadingGETModel) => {
+        .subscribe((next: ExpenditureHeadingPUTModel) => {
           this.loading_del = false;
           this.messages.splice(0, 0, { message: 'Debit Heading DELETED successfuly.', type: 'positive' });
         },

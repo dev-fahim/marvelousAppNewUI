@@ -36,9 +36,35 @@
         Head Name</label>
       <input type="text" class="input" formControlName="source_name">
     </div>
-    <button class="button is-link" type="submit" [ngClass]="{'is-loading': loading}" appShadow>Upgrade</button>
+    <div class="modal" [ngClass]="{'is-active': modal}">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="segment">
+          <div class="field">
+            <label class="label">Leave a messgae</label>
+            <textarea class="textarea" placeholder="Your Message" formControlName="extra_description"></textarea>
+          </div>
+          <div class="button is-success mr-2" appShadow (click)="toggle_modal()">Cancel</div>
+          <div class="button is-danger" appShadow (click)="onDelete()" (click)="toggle_modal()">Confirm</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" [ngClass]="{'is-active': modal_update}">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="segment">
+          <div class="field">
+            <label class="label">Leave a messgae</label>
+            <textarea class="textarea" placeholder="Your Message" formControlName="extra_description"></textarea>
+          </div>
+          <div class="button is-success mr-2" appShadow (click)="toggle_modal_update()">Cancel</div>
+          <div class="button is-info" appShadow (click)="onSubmit()" (click)="toggle_modal_update()">Done</div>
+        </div>
+      </div>
+    </div>
   </form>
+  <button class="button is-link mr-2" [ngClass]="{'is-loading': loading}" (click)="toggle_modal_update()" appShadow>Upgrade</button>
   <hr>
-  <button class="button is-danger mr-2" [ngClass]="{'is-loading': loading_del}" (click)="onDelete()" appShadow>Delete</button>
+  <button class="button is-danger mr-2" [ngClass]="{'is-loading': loading_del}" (click)="toggle_modal()" appShadow>Archive</button>
   <button class="button is-warning" (click)="onReset()" appShadow>Reset</button>
 </div>

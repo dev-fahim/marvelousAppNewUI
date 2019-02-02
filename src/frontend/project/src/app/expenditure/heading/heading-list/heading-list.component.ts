@@ -18,8 +18,14 @@ import { Router } from '@angular/router';
 export class HeadingListComponent implements OnInit {
   all_headings: ExpenditureHeadingGETModel[];
   heading_data: ExpenditureHeadingGETModel = {
+    id: 0,
     heading_name: '',
-    description: ''
+    description: '',
+    updated: '',
+    uuid: '',
+    url: '',
+    added: '',
+    is_deleted: false
   };
   messages: { message: string, type: string }[];
   uuid: string;

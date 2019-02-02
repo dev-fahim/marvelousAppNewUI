@@ -5,7 +5,7 @@ import { UnAuthorized } from './../../../common/unauthorized-error';
 import { Forbidden } from './../../../common/forbidden';
 import { BadInput } from './../../../common/bad-input';
 import { HeadingService } from './../../../service/expenditure/heading.service';
-import { ExpenditureHeadingGETModel } from './../../../service/models';
+import { ExpenditureHeadingGETModel, ExpenditureHeadingPOSTModel } from './../../../service/models';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
@@ -56,7 +56,7 @@ export class HeadingAddComponent implements OnInit {
       this.loading = true;
       this._headingService.add_heading(this.form.value)
         .subscribe(
-          (next: ExpenditureHeadingGETModel) => {
+          (next: ExpenditureHeadingPOSTModel) => {
             this.heading_data.emit(this.form.value);
             this.loading = false;
             this.form.reset;

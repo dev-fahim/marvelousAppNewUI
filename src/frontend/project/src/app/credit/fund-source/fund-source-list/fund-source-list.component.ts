@@ -19,7 +19,13 @@ export class FundSourceListComponent implements OnInit {
   loading = false;
   credit_fund_source_data: CreditFundSourceGETModel = {
     source_name: '',
-    description: ''
+    description: '',
+    id: 0,
+    updated: '',
+    uuid: '',
+    url: '',
+    added: '',
+    is_deleted: false
   }
   all_credit_fund_sources: CreditFundSourceGETModel[] = [];
   messages: { message: string, type: string }[] = [];
@@ -56,7 +62,13 @@ export class FundSourceListComponent implements OnInit {
       .subscribe(
         (next) => {
           this.loading = false;
-          this.all_credit_fund_sources = next;
+          let values = []
+          for (let data of next) {
+            if (data.is_deleted === false) {
+              values.push(data);
+            }
+          }
+          return this.all_credit_fund_sources = values;
         },
         (error: AppError) => {
           this.loading = false;

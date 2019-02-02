@@ -1,3 +1,4 @@
+import { CreditFundSourcePUTModel } from './../../../service/models';
 import { UnAuthorized } from './../../../common/unauthorized-error';
 import { Forbidden } from './../../../common/forbidden';
 import { BadInput } from 'src/app/common/bad-input';
@@ -21,9 +22,18 @@ export class FundSourceEditComponent implements OnInit {
   loading = false;
   loading_del = false;
   private _data = new BehaviorSubject<CreditFundSourceGETModel>({
+    id: 0,
     source_name: '',
-    description: ''
+    description: '',
+    url: '',
+    is_deleted: false,
+    added: '',
+    updated: '',
+    uuid: ''
   });
+
+  modal = false;
+  modal_update = false;
 
   @Input()
   set source(value: CreditFundSourceGETModel) {
@@ -42,10 +52,24 @@ export class FundSourceEditComponent implements OnInit {
       Validators.required,
       Validators.minLength(4),
       Validators.maxLength(30)
-    ])
+    ]),
+    extra_description: new FormControl("", [
+      Validators.required
+    ]),
+    is_deleted: new FormControl(false, [
+      Validators.required
+    ]),
+    description: new FormControl("")
   });
 
   constructor(private _router: Router, private _sourceService: SourceService) { }
+
+  toggle_modal() {
+    return this.modal = !this.modal;
+  }
+  toggle_modal_update() {
+    return this.modal_update = !this.modal_update;
+  }
 
   throw_error(error: AppError) {
     if (error instanceof BadInput) {
@@ -70,9 +94,13 @@ export class FundSourceEditComponent implements OnInit {
   ngOnInit() {
     this._data.subscribe(
       x => {
+        console.log(this.uuid)
         this.uuid = this.source.uuid;
         this.form.setValue({
-          source_name: this.source.source_name
+          source_name: this.source.source_name,
+          extra_description: "",
+          is_deleted: false,
+          description: ""
         })
       }
     );
@@ -83,7 +111,7 @@ export class FundSourceEditComponent implements OnInit {
       this.loading = true;
       this._sourceService.update_source(this.form.value, this.uuid)
         .subscribe(
-          (next: CreditFundSourceGETModel) => {
+          (next: CreditFundSourcePUTModel) => {
             this.loading = false;
             console.log('Updated')
             return this.messages.splice(0, 0, { message: 'Credit Fund Source has been UPDATED successfuly.', type: 'positive' });
@@ -99,9 +127,11 @@ export class FundSourceEditComponent implements OnInit {
   onDelete() {
     if (this.form.valid) {
       this.loading_del = true;
-      this._sourceService.delete_source(this.uuid)
-        .subscribe((next: CreditFundSourceGETModel) => {
+      this.form.get('is_deleted').setValue(true);
+      this._sourceService.delete_source(this.form.value, this.uuid)
+        .subscribe((next: CreditFundSourcePUTModel) => {
           this.loading_del = false;
+          console.log(this.form.value)
           this.messages.splice(0, 0, { message: 'Credit Fund Source has been DELETED successfuly.', type: 'positive' });
         },
           (error: AppError) => {
