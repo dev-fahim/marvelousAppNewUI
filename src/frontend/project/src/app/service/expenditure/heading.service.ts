@@ -1,3 +1,4 @@
+import { ExpenditureHeadingPUTModel } from './../models';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { LOCAL_REST_API_SERVER } from './../server.url';
@@ -43,8 +44,8 @@ export class HeadingService {
     )
   }
 
-  delete_heading(uuid: string) {
-    return this._http.delete<models.ExpenditureHeadingPUTModel>(LOCAL_REST_API_SERVER + 'expenditure/heading/view-update-delete/' + uuid +'/').pipe(
+  delete_heading(payloads: ExpenditureHeadingPUTModel, uuid: string) {
+    return this._http.put<models.ExpenditureHeadingPUTModel>(LOCAL_REST_API_SERVER + 'expenditure/heading/view-update-delete/' + uuid +'/', payloads).pipe(
       catchError(
         (error: HttpErrorResponse) => {
           return throwError(common.get_http_response_error(error));

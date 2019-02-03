@@ -50,7 +50,7 @@
 
 
 
-<div class="segment">
+<div>
   <article class="message is-danger"  *ngIf="fund_is_locked">
     <div class="message-header">
       <p>Fund</p>
@@ -88,5 +88,8 @@
       <label class="label">Fund Added Date</label>
       <input type="date" class="input" placeholder="Fund Added Date" formControlName="fund_added">
     </div>
+    <input type="submit" value="Add Credit" class="button is-primary" appShadow>
   </form>
+<hr>
+<button class="button is-warning" (click)="onReset()">Reset</button>
 </div>

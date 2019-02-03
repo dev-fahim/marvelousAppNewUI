@@ -1,16 +1,11 @@
 import { CreditFundSourcePUTModel } from './../../../service/models';
-import { UnAuthorized } from './../../../common/unauthorized-error';
-import { Forbidden } from './../../../common/forbidden';
-import { BadInput } from 'src/app/common/bad-input';
-import { AppError } from 'src/app/common/app-error';
 import { SourceService } from 'src/app/service/credit/source.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CreditFundSourceGETModel } from 'src/app/service/models';
 import { BehaviorSubject } from 'rxjs';
 import { Component, OnInit, Input } from '@angular/core';
-import { NotFound } from 'src/app/common/not-found';
-import { ServerError } from 'src/app/common/serve-error';
+import * as errors from '../../../common';
 
 @Component({
   selector: 'app-fund-source-edit',
@@ -71,26 +66,6 @@ export class FundSourceEditComponent implements OnInit {
     return this.modal_update = !this.modal_update;
   }
 
-  throw_error(error: AppError) {
-    if (error instanceof BadInput) {
-      return this.messages.splice(0, 0, { message: 'You have entered invalid data or fund is limited. All fields and required and must be valid.', type: 'error' });
-    }
-    if (error instanceof Forbidden) {
-      return this.messages.splice(0, 0, { message: 'You don\'t have permission for this action.', type: 'error' });
-    }
-    if (error instanceof NotFound) {
-      return this.messages.splice(0, 0, { message: '404 Not Found', type: 'error' });
-    }
-    if (error instanceof UnAuthorized) {
-      this._router.navigate(['/login'])
-      return this.messages.splice(0, 0, { message: 'You are not logged in.', type: 'error' });
-    }
-    if (error instanceof ServerError) {
-      return this.messages.splice(0, 0, { message: 'Internal server error.', type: 'error' });
-    }
-    return this.messages.splice(0, 0, { message: 'An expected error occured.', type: 'error' });
-  }
-
   ngOnInit() {
     this._data.subscribe(
       x => {
@@ -116,9 +91,10 @@ export class FundSourceEditComponent implements OnInit {
             console.log('Updated')
             return this.messages.splice(0, 0, { message: 'Credit Fund Source has been UPDATED successfuly.', type: 'positive' });
           },
-          (error: AppError) => {
+          (error: errors.AppError) => {
             this.loading = false;
-            return this.throw_error(error);
+            const main_error = errors.throw_http_response_error(error);
+            return this.messages.push({ message: main_error.detail, type: main_error.type })
           }
         )
     }
@@ -134,9 +110,10 @@ export class FundSourceEditComponent implements OnInit {
           console.log(this.form.value)
           this.messages.splice(0, 0, { message: 'Credit Fund Source has been DELETED successfuly.', type: 'positive' });
         },
-          (error: AppError) => {
-            this.loading_del = false;
-            return this.throw_error(error);
+          (error: errors.AppError) => {
+            this.loading = false;
+            const main_error = errors.throw_http_response_error(error);
+            return this.messages.push({ message: main_error.detail, type: main_error.type })
           }
         )
     }

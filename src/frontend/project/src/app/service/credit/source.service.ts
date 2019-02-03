@@ -6,7 +6,7 @@ import * as common from '../../common';
 import * as models from '../models';
 import { throwError } from 'rxjs';
 
-const CREDIT_SOURCE_API = LOCAL_REST_API_SERVER + 'credit/source/';
+export const CREDIT_SOURCE_API = LOCAL_REST_API_SERVER + 'credit/source/';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +51,6 @@ export class SourceService {
   }
 
   delete_source(payloads: models.CreditFundSourcePUTModel, uuid: string) {
-    console.log(CREDIT_SOURCE_API + 'view-update-delete/' + uuid + '/');
     return this._http.put<models.CreditFundSourcePUTModel>(CREDIT_SOURCE_API + 'view-update-delete/' + uuid + '/', payloads).pipe(
       catchError(
         (error: HttpErrorResponse) => {

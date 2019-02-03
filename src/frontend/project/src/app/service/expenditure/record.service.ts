@@ -7,7 +7,7 @@ import * as common from '../../common';
 import * as models from '../models';
 import { throwError } from 'rxjs';
 
-const EXPENDITURE_RECORD_REST_API_URL = LOCAL_REST_API_SERVER + 'expenditure/record/'
+export const EXPENDITURE_RECORD_REST_API_URL = LOCAL_REST_API_SERVER + 'expenditure/record/'
 
 export interface ExpenditureRecordFilter {
   is_verified?: string;
@@ -88,14 +88,14 @@ export class RecordService {
     );
   }
 
-  delete_record(uuid: string) {
-    return this._http.delete<models.ExpenditureRecordPUTModel>(EXPENDITURE_RECORD_REST_API_URL + 'view-update-delete/' + uuid + '/').pipe(
+  delete_record(uuid: string, payloads: models.ExpenditureRecordPUTModel) {
+    return this._http.put<models.ExpenditureRecordPUTModel>(EXPENDITURE_RECORD_REST_API_URL + 'view-update-delete/' + uuid + '/', payloads).pipe(
       catchError(
         (error: HttpErrorResponse) => {
           return throwError(common.get_http_response_error(error))
         }
       )
-    );
+    )
   }
 
   get_csv(filters: ExpenditureRecordFilter) {

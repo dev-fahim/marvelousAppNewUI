@@ -31,7 +31,7 @@ export interface RootObject {
     this_year_total_credit_fund_amount: number;
     this_year_total_unauthorized_expend_amount: number;
     this_month_total_credit_fund_amount: number;
-    this_year: Date;
+    this_year: string;
 }
 
 // Credit Fund Source Models
@@ -178,8 +178,8 @@ export interface LoanCreditGETModel { // OK
     source_name: string;
     url: string;
     description: string;
-    added: Date;
-    updated: Date;
+    added: string;
+    updated: string;
     amount: number;
     fund_added: string;
     uuid: string;

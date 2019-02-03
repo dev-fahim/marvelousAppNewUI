@@ -1,15 +1,10 @@
-import { NotFound } from './../../../common/not-found';
-import { ServerError } from 'src/app/common/serve-error';
-import { UnAuthorized } from './../../../common/unauthorized-error';
-import { Forbidden } from 'src/app/common/forbidden';
-import { BadInput } from 'src/app/common/bad-input';
-import { AppError } from './../../../common/app-error';
 import { FundService } from 'src/app/service/credit/fund.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { SourceService } from 'src/app/service/credit/source.service';
 import * as models from '../../../service/models';
+import * as errors from '../../../common';
 
 @Component({
   selector: 'app-fund-record-add',
@@ -51,35 +46,20 @@ export class FundRecordAddComponent implements OnInit {
     private _sourceService: SourceService
   ) { }
 
-  throw_error(error: AppError) {
-    if (error instanceof BadInput) {
-      return this.messages.splice(0, 0, { message: 'You have entered invalid data or fund is limited. All fields and required and must be valid.', type: 'error' });
-    }
-    if (error instanceof Forbidden) {
-      return this.messages.splice(0, 0, { message: 'You don\'t have permission for this action.', type: 'error' });
-    }
-    if (error instanceof NotFound) {
-      return this.messages.splice(0, 0, { message: '404 Not Found', type: 'error' });
-    }
-    if (error instanceof UnAuthorized) {
-      this._router.navigate(['/login'])
-      return this.messages.splice(0, 0, { message: 'You are not logged in.', type: 'error' });
-    }
-    if (error instanceof ServerError) {
-      return this.messages.splice(0, 0, { message: 'Internal Server Error.', type: 'error' });
-    }
-    return this.messages.splice(0, 0, { message: 'An unexpected error occured.', type: 'error' });
-  }
-
   ngOnInit() {
     this._sourceService.get_all_sources({ordering: '', search: ''})
       .subscribe(
         (next) => {
-          this.all_sources = next;
+          let data = []
+          for (const source of next) {
+            if (source.is_deleted === false) {data.push(source)}
+          }
+          return this.all_sources = data;
         },
-        (error: AppError) => {
+        (error: errors.AppError) => {
           this.loading = false;
-          this.throw_error(error);
+          const main_error = errors.throw_http_response_error(error);
+          return this.messages.push({message: main_error.detail, type: main_error.type})
         }
       )
     this._fundService.get_fund_status()
@@ -101,8 +81,10 @@ export class FundRecordAddComponent implements OnInit {
             this.form.reset;
             this.messages.splice(0, 0, { message: 'Credit fund record ADDED successfuly.', type: 'positive' });
           },
-          (error: AppError) => {
-            this.throw_error(error)
+          (error: errors.AppError) => {
+            this.loading = false;
+            const main_error = errors.throw_http_response_error(error);
+            return this.messages.push({message: main_error.detail, type: main_error.type})
           }
         )
     }
